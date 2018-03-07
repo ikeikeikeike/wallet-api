@@ -10,7 +10,7 @@ scalaVersion := "2.12.4"
 
 libraryDependencies ++= Seq(
   "com.typesafe.play"      %% "play-slick"              % "3.0.1",
-  "com.typesafe.play"      %% "play-slick-evolutions"   % "3.0.1",
+  // "com.typesafe.play"      %% "play-slick-evolutions"   % "3.0.1",
   "com.github.tototoshi"   %% "slick-joda-mapper"       % "2.3.0",
   "com.github.nscala-time" %% "nscala-time"             % "2.18.0",
   "org.joda"                % "joda-convert"            % "1.7",
@@ -25,11 +25,21 @@ libraryDependencies ++= Seq(
   "com.google.inject.extensions" % "guice-multibindings" % "4.2.0",
   jodaForms,
   guice,
-  jdbc,
   specs2 % Test,
   ws,
   ehcache
 )
 
-PlayKeys.devSettings := Seq("play.server.http.port" -> "9000")
+//PlayKeys.devSettings := Seq("play.server.http.port" -> "9000")
+
 javaOptions in Test += "-Dconfig.file=conf/test.conf"
+
+packageName in Universal := "wallet-api"
+
+val gentable = "generate app/data/entity/Tables.scala."
+val generate = taskKey[Unit](gentable)
+generate := {
+  import sys.process._
+  println("./gentable.sh" !!)
+  println(gentable)
+}

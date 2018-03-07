@@ -1,0 +1,3 @@
+[submodule "slick-table-code-generator"]
+	path = slick-table-code-generator
+	url = git@github.com:EudyptesCapital/slick-table-code-generator.git
