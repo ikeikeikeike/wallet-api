@@ -9,8 +9,8 @@ resolvers += "Akka Snapshot Repository" at "http://repo.akka.io/snapshots/"
 scalaVersion := "2.12.4"
 
 libraryDependencies ++= Seq(
-  "com.typesafe.play"      %% "play-slick"              % "3.0.1",
-  // "com.typesafe.play"      %% "play-slick-evolutions"   % "3.0.1",
+  "com.typesafe.play"      %% "play-slick"              % "3.0.2",
+  "com.typesafe.play"      %% "play-slick-evolutions"   % "3.0.2",
   "com.github.tototoshi"   %% "slick-joda-mapper"       % "2.3.0",
   "com.github.nscala-time" %% "nscala-time"             % "2.18.0",
   "org.joda"                % "joda-convert"            % "1.7",
