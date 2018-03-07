@@ -6,15 +6,15 @@ import data.store.db._
 import javax.inject.Inject
 import play.api.db.slick.DatabaseConfigProvider
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 @ImplementedBy(classOf[UserStoreImpl])
-trait UserStore extends Findable[UsersRow, Int] {
+trait UserStore  {
   def findByEmail(email: String): Future[Option[UsersRow]]
 }
 
-class UserStoreImpl @Inject()(val dbConfigProvider: DatabaseConfigProvider)(implicit val ec: ExecutionContext)
-  extends DBStore {
+class UserStoreImpl @Inject()(val dbConfigProvider: DatabaseConfigProvider)
+  extends DBStore with UserStore {
   import dbConfig.profile.api._
 
   def findByEmail(email: String): Future[Option[UsersRow]] = {

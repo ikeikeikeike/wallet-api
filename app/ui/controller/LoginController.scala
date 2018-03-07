@@ -1,11 +1,12 @@
 package ui.controller
 
 import javax.inject.Inject
+import ui.presenter.LoginPresenter
 
 import scala.concurrent.{ExecutionContext, Future}
 
 
-class LoginController @Inject() ()(implicit ec: ExecutionContext) extends BaseController {
+class LoginController @Inject() (presenter: LoginPresenter)(implicit ec: ExecutionContext) extends BaseController {
 
   import play.api.libs.json._
 
@@ -14,6 +15,11 @@ class LoginController @Inject() ()(implicit ec: ExecutionContext) extends BaseCo
   case class LoginJson(email: String, password: String)
 
   def index = Action.async { implicit request =>
+
+    for (user <- presenter.findByEmail("unko")) yield {
+      println(user)
+    }
+
     Future.successful(Ok(Json.obj("status" -> "ok")))
   }
 
