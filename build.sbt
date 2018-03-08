@@ -9,6 +9,7 @@ resolvers += "Akka Snapshot Repository" at "http://repo.akka.io/snapshots/"
 scalaVersion := "2.12.4"
 
 libraryDependencies ++= Seq(
+  "org.mindrot"             % "jbcrypt"                 % "0.4",
   "com.typesafe.play"      %% "play-slick"              % "3.0.2",
   "com.typesafe.play"      %% "play-slick-evolutions"   % "3.0.2",
   "com.github.tototoshi"   %% "slick-joda-mapper"       % "2.3.0",

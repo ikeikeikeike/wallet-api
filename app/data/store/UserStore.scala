@@ -3,17 +3,20 @@ package data.store
 import com.google.inject.ImplementedBy
 import data.entity.Tables._
 import data.store.db._
+import error.AccountError
 import javax.inject.Inject
 import play.api.db.slick.DatabaseConfigProvider
+import util.RawPassword
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @ImplementedBy(classOf[UserStoreImpl])
 trait UserStore  {
   def findByEmail(email: String): Future[Option[UsersRow]]
+  def register(email: String, password: RawPassword): Future[Either[AccountError, UsersRow]]
 }
 
-class UserStoreImpl @Inject()(val dbConfigProvider: DatabaseConfigProvider)
+class UserStoreImpl @Inject()(val dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext)
   extends DBStore with UserStore {
   import dbConfig.profile.api._
 
@@ -22,4 +25,14 @@ class UserStoreImpl @Inject()(val dbConfigProvider: DatabaseConfigProvider)
     db.run(q.result.headOption)
   }
 
+  def register(email: String, password: RawPassword): Future[Either[AccountError, UsersRow]] = {
+    val user = UsersRow(None, email, email, password.encrypt, None, None)
+    val query = Users returning Users.map(_.id) into ((user, id) => user.copy(id=Some(id))) += user
+
+    db.run(query.transactionally).map { row =>
+      Right(row)
+    } recover {
+      case err: AccountError => Left(err)
+    }
+  }
 }

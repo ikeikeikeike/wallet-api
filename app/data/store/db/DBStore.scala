@@ -1,6 +1,6 @@
 package data.store.db
 
-import data.entity.RecordNotFoundException
+import error.RecordNotFound
 import play.api.db.slick.DatabaseConfigProvider
 import slick.basic.DatabaseConfig
 import slick.jdbc.JdbcProfile
@@ -12,7 +12,7 @@ trait Findable[A, B] {
   import scala.concurrent.ExecutionContext.Implicits.global
 
   def find(id: B): Future[Option[A]]
-  def get(id: B): Future[A] = find(id).map { c => c.getOrElse(throw new RecordNotFoundException) }
+  def get(id: B): Future[A] = find(id).map { c => c.getOrElse(throw new RecordNotFound) }
 }
 
 trait DBStore {
