@@ -6,13 +6,15 @@ import domain.model.User
 import domain.trans._
 import error.AccountError
 import javax.inject.Inject
-import util.RawPassword
+import util.crypto.RawPassword
 
 import scala.concurrent.{ExecutionContext, Future}
 
 
 @ImplementedBy(classOf[AccountUseCaseImpl])
 trait AccountUseCase {
+
+  def find(id: Int): Future[Option[User]]
 
   def findByEmail(email: String): Future[Option[User]]
 
@@ -23,6 +25,10 @@ trait AccountUseCase {
 
 class AccountUseCaseImpl @Inject()(userRepo: UserRepo, userTrans: UserTranslator)(implicit ec: ExecutionContext)
   extends AccountUseCase {
+
+  def find(id: Int): Future[Option[User]] =
+    for (user <- userRepo.find(id))
+      yield userTrans.translate(user)
 
   def findByEmail(email: String): Future[Option[User]] =
     for (user <- userRepo.findByEmail(email))

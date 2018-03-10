@@ -5,12 +5,14 @@ import data.entity.Tables._
 import data.store.UserStore
 import error.AccountError
 import javax.inject.Inject
-import util.RawPassword
+import util.crypto.RawPassword
 
 import scala.concurrent.Future
 
 @ImplementedBy(classOf[UserRepoImpl])
 trait UserRepo {
+
+  def find(id: Int): Future[Option[UsersRow]]
 
   def findByEmail(email: String): Future[Option[UsersRow]]
 
@@ -19,6 +21,9 @@ trait UserRepo {
 }
 
 class UserRepoImpl @Inject()(userStore: UserStore) extends UserRepo {
+
+  def find(id: Int): Future[Option[UsersRow]] =
+    userStore.find(id)
 
   def findByEmail(email: String): Future[Option[UsersRow]] =
     userStore.findByEmail(email)

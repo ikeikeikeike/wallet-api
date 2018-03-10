@@ -7,12 +7,14 @@ import data.store.db._
 import error.AccountError
 import javax.inject.Inject
 import play.api.db.slick.DatabaseConfigProvider
-import util.RawPassword
+import util.crypto.RawPassword
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @ImplementedBy(classOf[UserStoreImpl])
 trait UserStore  {
+
+  def find(id: Int): Future[Option[UsersRow]]
 
   def findByEmail(email: String): Future[Option[UsersRow]]
 
@@ -23,6 +25,11 @@ class UserStoreImpl @Inject()(val dbConfigProvider: DatabaseConfigProvider)(impl
   extends DBStore with UserStore {
 
   import dbConfig.profile.api._
+
+  def find(id: Int): Future[Option[UsersRow]] = {
+    val q = for (u <- Users if u.id === id) yield u
+    db.run(q.result.headOption)
+  }
 
   def findByEmail(email: String): Future[Option[UsersRow]] = {
     val q = for (u <- Users if u.email === email) yield u

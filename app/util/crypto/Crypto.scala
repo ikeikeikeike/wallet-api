@@ -1,4 +1,4 @@
-package util
+package util.crypto
 
 import org.mindrot.jbcrypt.BCrypt
 
