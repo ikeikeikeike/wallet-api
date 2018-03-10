@@ -1,6 +1,7 @@
 package data.store
 
 import com.google.inject.ImplementedBy
+import com.mysql.jdbc.exceptions.jdbc4.{MySQLIntegrityConstraintViolationException => DuplicatedError}
 import data.entity.Tables._
 import data.store.db._
 import error.AccountError
@@ -32,7 +33,8 @@ class UserStoreImpl @Inject()(val dbConfigProvider: DatabaseConfigProvider)(impl
     db.run(query.transactionally).map { row =>
       Right(row)
     } recover {
-      case err: AccountError => Left(err)
+      case _: DuplicatedError => Left(AccountError.DuplicatedEmail)
+      case e                  => Left(AccountError.Unknown(e.toString))
     }
   }
 }

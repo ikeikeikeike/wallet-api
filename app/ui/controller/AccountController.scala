@@ -31,7 +31,7 @@ class AccountController @Inject() (presenter: AccountPresenter)(implicit ec: Exe
       case s: JsSuccess[AuthJson] =>
         val (email, password) = (s.value.email, s.value.password)
         for {
-          user <- presenter.signUp(email, password) ?| (err => BadRequest(Json.obj("status" -> err.msg)))
+          user <- presenter.signUp(email, password) ?| (err => BadRequest(Json.obj("status" -> err.message)))
         } yield Ok(Json.obj("status" -> "ok", "data" -> Json.obj("token" -> user.email))) // user.token
       case e: JsError =>
         Future.successful(BadRequest(Json.obj("status" -> "error", "data" -> JsError.toJson(e))))
