@@ -17,7 +17,6 @@ trait UserStore  {
   def findByEmail(email: String): Future[Option[UsersRow]]
 
   def register(email: String, password: RawPassword): Future[Either[AccountError, UsersRow]]
-
 }
 
 class UserStoreImpl @Inject()(val dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext)

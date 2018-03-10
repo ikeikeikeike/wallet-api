@@ -20,9 +20,10 @@ trait UserRepo {
 
 class UserRepoImpl @Inject()(userStore: UserStore) extends UserRepo {
 
-  def findByEmail(email: String): Future[Option[UsersRow]] = userStore.findByEmail(email)
+  def findByEmail(email: String): Future[Option[UsersRow]] =
+    userStore.findByEmail(email)
 
-  def register(email: String, rawPassword: RawPassword):Future[Either[AccountError, UsersRow]] = {
+  def register(email: String, rawPassword: RawPassword): Future[Either[AccountError, UsersRow]] = {
     userStore.register(email, rawPassword)
   }
 

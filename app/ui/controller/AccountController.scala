@@ -15,20 +15,12 @@ class AccountController @Inject() (presenter: AccountPresenter)(implicit ec: Exe
 
   import play.api.libs.json._
 
-  def index = Action.async { implicit req =>
-    for (user <- presenter.findByEmail("unko")) yield {
-      println(user)
-    }
-
-    Future.successful(Ok(Json.obj("status" -> "ok")))
-  }
-
   def signIn = Action.async(parse.json) { implicit req: Request[JsValue] =>
     req.body.validate[AuthJson] match {
       case s: JsSuccess[AuthJson] =>
         val (email, password) = (s.value.email, s.value.password)
         for {
-          user <- presenter.signIn(email, password) ?| (err => BadRequest(Json.obj("status" -> err.message)))
+          user <- presenter.signIn(email, password) ?| (e => BadRequest(Json.obj("status" -> e.message)))
         } yield Ok(Json.obj("status" -> "ok", "data" -> Json.obj("token" -> user.token)))
       case e: JsError =>
         Future.successful(BadRequest(Json.obj("status" -> "error", "data" -> JsError.toJson(e))))
@@ -40,7 +32,7 @@ class AccountController @Inject() (presenter: AccountPresenter)(implicit ec: Exe
       case s: JsSuccess[AuthJson] =>
         val (email, password) = (s.value.email, s.value.password)
         for {
-          user <- presenter.signUp(email, password) ?| (err => BadRequest(Json.obj("status" -> err.message)))
+          user <- presenter.signUp(email, password) ?| (e => BadRequest(Json.obj("status" -> e.message)))
         } yield Ok(Json.obj("status" -> "ok", "data" -> Json.obj("token" -> user.token)))
       case e: JsError =>
         Future.successful(BadRequest(Json.obj("status" -> "error", "data" -> JsError.toJson(e))))
