@@ -32,17 +32,22 @@ class AuthAction @Inject() (
   def retrieve[A](idOpt: Option[Int], request: Request[A]): Future[Either[Result, AuthRequest[A]]] = {
     idOpt match {
       case Some(id) =>
-        for (userOpt <- userCase.find(id))
-          yield userOpt match {
-            case Some(user) =>
-              Right(new AuthRequest(AuthContext(user), request))
-            case None =>
-              Left(NotFound(Json.obj("status" -> "error", "meessage" -> "user does not exists")))
-          }
+        retrieve[A](id, request)
       case _ =>
         Future.successful(Left(Forbidden(Json.obj("status" -> "error", "message" -> "not authorized"))))
     }
   }
+
+  def retrieve[A](id: Int, request: Request[A]): Future[Either[Result, AuthRequest[A]]] = {
+    for (userOpt <- userCase.find(id))
+      yield userOpt match {
+        case Some(user) =>
+          Right(new AuthRequest(AuthContext(user), request))
+        case None =>
+          Left(NotFound(Json.obj("status" -> "error", "meessage" -> "user does not exists")))
+      }
+  }
+
 
   def getToken(headerMap: Map[String, String]): Option[String] = {
     val bearer = "Bearer "
