@@ -12,7 +12,7 @@
 
 
 GET     /account/login        ui.controller.AccountController.index
-#POST    /account/signin       ui.controller.AccountController.signIn
+POST    /account/signin       ui.controller.AccountController.signIn
 POST    /account/signup       ui.controller.AccountController.signUp
 
 # Map static resources from the /public folder to the /assets URL path

@@ -11,8 +11,11 @@ import scala.concurrent.Future
 
 @ImplementedBy(classOf[UserRepoImpl])
 trait UserRepo {
+
   def findByEmail(email: String): Future[Option[UsersRow]]
+
   def register(email: String, rawPassword: RawPassword): Future[Either[AccountError, UsersRow]]
+
 }
 
 class UserRepoImpl @Inject()(userStore: UserStore) extends UserRepo {

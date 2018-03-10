@@ -10,21 +10,23 @@ import scala.concurrent.Future
 
 @ImplementedBy(classOf[AccountPresenterImpl])
 trait AccountPresenter {
+
   def findByEmail(email: String): Future[Option[User]]
+
   def signIn(email: String, password: String): Future[Either[AccountError, User]]
+
   def signUp(email: String, password: String): Future[Either[AccountError, User]]
 }
 
 class AccountPresenterImpl @Inject() (accountUseCase: AccountUseCase) extends AccountPresenter {
 
-  def findByEmail(email: String): Future[Option[User]] = {
+  def findByEmail(email: String): Future[Option[User]] =
     accountUseCase.findByEmail(email)
-  }
 
-  def signIn(email: String, password: String): Future[Either[AccountError, User]] = ???
+  def signIn(email: String, password: String): Future[Either[AccountError, User]] =
+    accountUseCase.signIn(email, password)
 
-  def signUp(email: String, password: String): Future[Either[AccountError, User]] = {
+  def signUp(email: String, password: String): Future[Either[AccountError, User]] =
     accountUseCase.signUp(email, password)
-  }
 
 }
