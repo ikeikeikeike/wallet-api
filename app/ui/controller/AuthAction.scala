@@ -43,11 +43,10 @@ class AuthAction @Inject() (
       yield userOpt match {
         case Some(user) =>
           Right(new AuthRequest(AuthContext(user), request))
-        case None =>
+        case _ =>
           Left(NotFound(Json.obj("status" -> "error", "meessage" -> "user does not exists")))
       }
   }
-
 
   def getToken(headerMap: Map[String, String]): Option[String] = {
     val bearer = "Bearer "
