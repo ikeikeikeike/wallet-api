@@ -4,7 +4,7 @@ import io.jsonwebtoken.{ExpiredJwtException, MalformedJwtException, _}
 import javax.crypto.spec.SecretKeySpec
 
 import scala.collection.JavaConverters._
-import scala.collection.mutable.Map
+import scala.collection.mutable
 import scala.util.Try
 import scala.util.control.Exception._
 
@@ -20,7 +20,7 @@ object JwtSupport {
     ).toOption.flatten
   }
 
-  def createClaims(v: Map[String, AnyRef]): Claims = {
+  def createClaims(v: mutable.Map[String, AnyRef]): Claims = {
     Jwts.claims(v.asJava)
   }
 

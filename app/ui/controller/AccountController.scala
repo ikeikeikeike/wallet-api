@@ -11,9 +11,13 @@ import scala.concurrent.{ExecutionContext, Future}
 case class AuthJson(email: String, password: String)
 object AuthJson { implicit val authJsonFormat = Json.format[AuthJson] }
 
-class AccountController @Inject() (presenter: AccountPresenter)(implicit ec: ExecutionContext) extends BaseController {
+class AccountController @Inject() (authAction: AuthAction, presenter: AccountPresenter)(implicit ec: ExecutionContext) extends BaseController {
 
   import play.api.libs.json._
+
+  def index = authAction.async { implicit req =>
+    Future.successful(Ok(Json.obj("user" -> req.ctx.user)))
+  }
 
   def signIn = Action.async(parse.json) { implicit req: Request[JsValue] =>
     req.body.validate[AuthJson] match {

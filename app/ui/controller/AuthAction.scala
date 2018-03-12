@@ -11,7 +11,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 case class AuthContext(user: User)
 
-class AuthRequest[A](val context: AuthContext, request: Request[A]) extends WrappedRequest[A](request)
+class AuthRequest[A](val ctx: AuthContext, request: Request[A]) extends WrappedRequest[A](request)
 
 class AuthAction @Inject() (
   userCase: AccountUseCase
